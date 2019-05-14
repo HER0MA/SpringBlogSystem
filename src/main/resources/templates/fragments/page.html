@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+
+<nav data-th-fragment="page" data-th-if="${page.totalPages gt 0}" data-th-object="${page}">
+ 
+	<!-- #page <= 7 -->
+	<ul class="pagination" data-th-if="${page.totalPages le 7}" >
+	 	<!-- total -->
+ 		<li class="tbpage-total-elements disabled">[[${page.totalElements}]] results</li>
+ 		
+ 		<!-- page size -->
+		<select class="custom-select tbpage-size" data-th-attr="pageIndex=${page.number}">
+			<option data-th-each="i : ${#arrays.toIntegerArray({5,10,40,100})}" data-th-value="${i}" 
+				 data-th-selected="${i eq page.size}" data-th-text="${i}"></option>
+		</select>
+		
+		<!-- previous page -->
+		<li class="page-item" data-th-classappend="*{first} ? 'disabled' : ''">
+			<a href="javascript:void(0);" class="page-link tbpage-item" data-th-attr="pageIndex=${page.number} - 1" aria-label="Previous">
+				<span aria-hidden="true">«</span>
+			</a>
+		</li>
+		
+		<!-- page number -->
+		<li class="page-item" data-th-each="i : ${#numbers.sequence(1, page.totalPages)}" 
+			data-th-classappend="${(page.number + 1) eq i} ? 'active' : ''" >
+			<a class="page-link tbpage-item" data-th-attr="pageIndex=${i} - 1" href="javascript:void(0);">
+                 <span data-th-text="${i}"></span>
+            </a>
+		</li>
+		
+		<!-- next page -->
+		<li class="page-item" data-th-classappend="*{last} ? 'disabled' : ''">
+			<a href="javascript:void(0);" class="page-link tbpage-item" data-th-attr="pageIndex=${page.number} + 1" aria-label="Next">
+				<span aria-hidden="true">»</span>
+			</a>
+		</li>
+	</ul>
+		
+	<!-- #page > 7 -->
+	<ul class="pagination" data-th-if="${page.totalPages gt 7}" >
+	 	<!-- total -->
+ 		<li class="tbpage-total-elements disabled">[[${page.totalElements}]] results</li>
+ 		
+ 		<!-- page size -->
+		<select class="custom-select tbpage-size" data-th-attr="pageIndex=${page.number}">
+			<option data-th-each="i : ${#arrays.toIntegerArray({5,10,40,100})}" data-th-value="${i}" 
+				 data-th-selected="${i eq page.size}" data-th-text="${i}"></option>
+		</select>
+
+		<!-- previous page -->
+		<li class="page-item" data-th-classappend="*{first} ? 'disabled' : ''">
+			<a href="javascript:void(0);" class="page-link tbpage-item" data-th-attr="pageIndex=${page.number} - 1" aria-label="Previous">
+				<span aria-hidden="true">«</span>
+			</a>
+		</li>
+		
+ 		<!-- Main Page -->
+		<li class="page-item" data-th-classappend="${(page.number + 1) eq 1} ? 'active' : ''" >
+			<a href="javascript:void(0);" class="page-link tbpage-item" data-th-attr="pageIndex=0">1</a>
+		</li>
+		 
+		
+	 	<!-- #page <= 4 -->
+	 	<li class="page-item" data-th-if="${(page.number + 1) le 4}" data-th-each="i : ${#numbers.sequence(2,5)}" 
+			data-th-classappend="${(page.number + 1) eq i} ? 'active' : ''" >
+			<a class="page-link tbpage-item" href="javascript:void(0);" data-th-attr="pageIndex=${i} - 1">
+                <span data-th-text="${i}"></span>
+            </a>
+		</li>
+ 
+		<li class="page-item disabled" data-th-if="${(page.number + 1) le 4}">
+			<a href="javascript:void(0);" class="page-link tbpage-item">
+				<span aria-hidden="true">...</span>
+			</a>
+		</li>
+		
+		<!-- last page - current page <= 3 -->
+		<li class="page-item disabled" data-th-if="${(page.totalPages-(page.number + 1)) le 3}">
+			<a href="javascript:void(0);" class="page-link tbpage-item">
+				<span aria-hidden="true">...</span>
+			</a>
+		</li>  
+	 	<li class="page-item" data-th-if="${(page.totalPages-(page.number + 1)) le 3}" data-th-each="i : ${#numbers.sequence(page.totalPages-4, page.totalPages-1)}" 
+			data-th-classappend="${(page.number + 1) eq i} ? 'active' : ''" >
+			<a class="page-link tbpage-item" href="javascript:void(0);" data-th-attr="pageIndex=${i} - 1">
+                <span data-th-text="${i}"></span>
+           </a>
+		</li>
+
+		<!-- last page - current page > 3 -->
+		 
+		<li class="page-item disabled" data-th-if="${((page.number + 1) gt 4) && ((page.totalPages-(page.number + 1)) gt 3 )}">
+			<a href="javascript:void(0);" class="page-link tbpage-item">
+				<span aria-hidden="true">...</span>
+			</a>
+		</li> 
+	 	<li class="page-item" data-th-if="${((page.number + 1) gt 4) && ((page.totalPages-(page.number + 1)) gt 3 )}" >
+	 		<a href="javascript:void(0);" class="page-link tbpage-item" data-th-attr="pageIndex=${page.number}">[[${page.number}]]</a>
+	 	</li>
+		<li class="page-item active" data-th-if="${((page.number + 1) gt 4) && ((page.totalPages-(page.number + 1)) gt 3 )}">
+			<a href="javascript:void(0);" class="page-link tbpage-item" data-th-attr="pageIndex=${page.number} + 1">[[${page.number + 1}]]</a>
+		</li>
+		<li class="page-item" data-th-if="${((page.number + 1) gt 4) && ((page.totalPages-(page.number + 1)) gt 3 )}">
+			<a href="javascript:void(0);" class="page-link tbpage-item" data-th-attr="pageIndex=${page.number} + 2">[[${page.number + 2}]]</a>
+		</li>
+		
+		<li class="page-item disabled"  data-th-if="${((page.number + 1) gt 4) && ((page.totalPages-(page.number + 1)) gt 3 )}">
+			<a href="javascript:void(0);" class="page-link tbpage-item">
+				<span aria-hidden="true">...</span>
+			</a>
+		</li>
+ 
+		<!-- last page -->
+		<li class="page-item" data-th-classappend="${(page.number + 1) eq page.totalPages} ? 'active' : ''" >
+			<a href="javascript:void(0);" class="page-link tbpage-item" data-th-attr="pageIndex=${page.totalPages} - 1">[[${page.totalPages}]]</a>
+		</li>
+ 
+ 		<!-- next page -->
+ 		<li class="page-item" data-th-classappend="*{last} ? 'disabled' : ''">
+			<a href="javascript:void(0);" class="page-link tbpage-item" data-th-attr="pageIndex=${page.number} + 1" aria-label="Next">
+				<span aria-hidden="true">»</span>
+			</a>
+		</li>
+	</ul>
+ 
+ 
+</nav>
+
+</body>
+</html>

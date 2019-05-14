@@ -1,7 +1,9 @@
 package com.henry.spring.blog.controller;
 
+import com.henry.spring.blog.domain.Authority;
 import com.henry.spring.blog.domain.User;
 import com.henry.spring.blog.repository.UserRepository;
+import com.henry.spring.blog.service.AuthorityService;
 import com.henry.spring.blog.service.UserService;
 import com.henry.spring.blog.util.ConstraintViolationExceptionHandler;
 import com.henry.spring.blog.vo.Response;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.ConstraintViolationException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,6 +29,9 @@ import java.util.List;
 public class UserController {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private AuthorityService authorityService;
 
     /**
      * Get all users
@@ -65,7 +71,12 @@ public class UserController {
      * @return
      */
     @PostMapping
-    public ResponseEntity<Response> saveOrUpateUser(User user) {
+    public ResponseEntity<Response> saveOrUpateUser(User user, Long authorityId) {
+
+        List<Authority> authorities = new ArrayList<>();
+        authorities.add(authorityService.getAuthorityById(authorityId));
+        user.setAuthorities(authorities);
+
         try {
             userService.saveOrUpateUser(user);
         }  catch (ConstraintViolationException e)  {

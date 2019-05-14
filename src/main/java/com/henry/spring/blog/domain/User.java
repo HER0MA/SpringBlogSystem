@@ -2,15 +2,21 @@ package com.henry.spring.blog.domain;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * User entity
  */
 @Entity
-public class User {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -38,6 +44,21 @@ public class User {
     @Column(length = 200)
     private String avatar;
 
+    @ManyToMany(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
+    @JoinTable(name = "user_authority", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
+    private List<Authority> authorities;
+
+    protected User() {
+    }
+
+    public User(Long id, String name, String username, String email) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.username = username;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -60,16 +81,6 @@ public class User {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
-    }
-
-    protected User() {
-    }
-
-    public User(Long id, String name, String username, String email) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.username = username;
     }
 
     public Long getId() {
@@ -101,4 +112,37 @@ public class User {
         return String.format("User[id=%d,name='%s',username='%s',email='%s']", id, name, username, email);
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // convert List<Authority> to List<SimpleGrantedAuthority> for front end
+        List<SimpleGrantedAuthority> simpleAuthorities = new ArrayList<>();
+        for(GrantedAuthority authority : this.authorities){
+            simpleAuthorities.add(new SimpleGrantedAuthority(authority.getAuthority()));
+        }
+        return simpleAuthorities;
+    }
+
+    public void setAuthorities(List<Authority> authorities) {
+        this.authorities = authorities;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

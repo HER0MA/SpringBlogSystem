@@ -15,12 +15,12 @@
 
             <div class="row">
                 <div class="col-md-12">
-                    <span>
-                      <a href="/u/henry" title="henry" >
-                        <img src="https://static.oschina.net/uploads/user/77/155593_50.jpg?t=1437621331000" class="blog-avatar-230"
-                             alt="henry">
-                      </a>
-                    </span>
+			        <span>
+			          <a href="/u/henry" th:href="'/u/' + ${user.username}" title="henry" th:title="${user.username}" >
+			            <img th:src="${user.avatar} == null ? '/images/avatar-defualt.jpg' : ${user.avatar} "
+                             class="blog-avatar-230">
+			          </a>
+			        </span>
 
                 </div>
 
@@ -28,24 +28,22 @@
             <div class="row">
 
                 <div class="col-md-12">
-                    <h2 class="card-text">Henry</h2>
+                    <h2 class="card-text" th:text="${user.name}">Henry</h2>
+                    <h4 class="card-text" th:text="${user.username}">henry</h4>
                 </div>
             </div>
-            <div class="row">
 
-                <div class="col-md-12">
-                    <h4 class="card-text">henry</h4>
-                </div>
-            </div>
-            <hr>
+
             <div class="row ">
                 <div class="col-md-12">
                     <h5><i class="fa fa-envelope-o" aria-hidden="true"></i>
-                        <a href="mailto:henry@test.com">henry@test.com</a></h5>
+                        <a href="mailto:henry@test.com" th:href="'mailto:'+ ${user.email}" th:text="${user.email}">henry@test.com</a></h5>
                 </div>
             </div>
 
-	      <!-- 分类 -->
+            <hr>
+
+	      <!-- Group -->
 	        <div class="card my-4">
 	            <h5 class="card-header"><i class="fa fa-bars" aria-hidden="true"></i> Group</h5>
 	
@@ -70,128 +68,56 @@
 	        </div>
         </div>
         
-   
-
         <!-- Right -->
-
 
         <div class="col-md-8 col-xl-9">
             <!-- Tool bar -->
- 
+
             <ul class="nav nav-tabs mr-auto">
 
                 <li class="nav-item">
-                    <a class="nav-link active" href="/u/henry/blogs?order=new">Most Recent</a>
+                    <a class="nav-link " data-th-classappend="${order} eq 'new' ? 'active' : ''"
+                       href="javascript:void(0)" th:attr="url='/u/'+${user.username}+'/blogs?order=new'">Most Recent</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="/u/henry/blogs?order=hot">Hottest</a>
+                    <a class="nav-link" data-th-classappend="${order} eq 'hot' ? 'active' : ''"
+                       href="javascript:void(0)" th:attr="url='/u/'+${user.username}+'/blogs?order=hot'">Top</a>
                 </li>
 
                 <form class="form-inline mt-2 mt-md-0">
-                    <input class="form-control mr-sm-2" type="text" placeholder="Search">
-                    <a href="/u/henry/blogs?keyword=ww" class="btn btn-outline-secondary my-2 my-sm-0"><i class="fa fa-search"
-                                                                                             aria-hidden="true"></i></a>
+                    <input class="form-control mr-sm-2" type="text" placeholder="Search" id="keyword" th:value="${keyword}">
+                    <a href="javascript:void(0)" class="btn btn-outline-secondary my-2 my-sm-0" id="searchBlogs">
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                    </a>
                 </form>
-
 
             </ul>
 
-
-
-            <!-- Blog Post -->
-            <div class="card mb-4">
-                <div class="card-block">
-                    <h2 class="card-title">
- 
-                        <a href="/u/henry/blogs/1" class="card-link" title="henry">
-                            Lorem ipsum dolor sit amet
-                        </a></h2>
-                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
-                        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-                        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris. </p>
-                    <div class="card-text">
-                        	Published on 2018-03-17 <i class="fa fa-eye" aria-hidden="true">210</i>
-                        <i class="fa fa-heart-o" aria-hidden="true">10</i> <i class="fa fa-comment-o"
-                                                                              aria-hidden="true">110</i>
+            <div id="mainContainer">
+                <div id="mainContainerRepleace">
+                    <div class="card mb-4" th:each="blog : ${blogList}">
+                        <div class="card-block">
+                            <h2 class="card-title">
+                                <a href="/u/henry/blogs/1" class="card-link" title="henry"
+                                   th:href="'/u/' + ${blog.user.username} + '/blogs/'+ ${blog.id}"  th:title="${blog.user.username}" th:text="${blog.title}">
+                                    Lorem ipsum dolor sit amet
+                                </a>
+                            </h2>
+                            <p class="card-text" th:text="${blog.summary}">Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                                sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris. </p>
+                            <div class="card-text">
+                                Published on [[${#dates.format(blog.createTime, 'yyyy-MM-dd HH:mm')}]] <i class="fa fa-eye" aria-hidden="true">[[${blog.readSize}]]</i>
+                                <i class="fa fa-heart-o" aria-hidden="true">[[${blog.voteSize}]]</i> <i class="fa fa-comment-o"
+                                                                                                        aria-hidden="true">[[${blog.commentSize}]]</i>
+                            </div>
+                        </div>
                     </div>
+
+                    <div th:replace="~{fragments/page :: page}">...</div>
                 </div>
             </div>
-
-            <!-- Blog Post -->
-            <div class="card mb-4">
-                <div class="card-block">
-                    <h2 class="card-title">
-                        <a href="/u/henry/blogs/1" class="card-link" title="henry">
-                            Lorem ipsum dolor sit amet
-                        </a></h2>
-                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                        Ut enim ad minim veniam. </p>
-                    <div class="card-text">
-                        	Published on 2018-03-17 <i class="fa fa-eye" aria-hidden="true">1</i>
-                        <i class="fa fa-heart-o" aria-hidden="true">130</i> <i class="fa fa-comment-o"
-                                                                               aria-hidden="true">0</i>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Blog Post -->
-            <div class="card mb-4">
-                <div class="card-block">
-                    <h2 class="card-title">
-                        <a href="/u/henry/blogs/1" class="card-link" title="henry">
-                            Lorem ipsum dolor sit amet
-                        </a></h2>
-                    <p class="card-text">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                        Ut enim ad minim veniam.</p>
-                    <div class="card-text">
-                        	Published on 2018-03-17 <i class="fa fa-eye" aria-hidden="true">2</i>
-                        <i class="fa fa-heart-o" aria-hidden="true">0</i> <i class="fa fa-comment-o" aria-hidden="true">10</i>
-                    </div>
-                </div>
-            </div>
-            <!-- Blog Post -->
-            <div class="card mb-4">
-                <div class="card-block">
-                    <h2 class="card-title">
-                        <a href="/u/henry/blogs/1" class="card-link" title="henry">
-                            Lorem ipsum dolor sit amet
-                        </a></h2>
-                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                        Ut enim ad minim veniam.</p>
-                    <div class="card-text">
-                       	Published on 2018-03-17 <i class="fa fa-eye" aria-hidden="true">2</i>
-                        <i class="fa fa-heart-o" aria-hidden="true">0</i> <i class="fa fa-comment-o" aria-hidden="true">10</i>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Pagination -->
-            <nav>
-                <ul class="pagination justify-content-center mb-4">
-                    <li class="page-item">
-                        <a href="#" class="page-link" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    <li class="page-item active"><a href="#" class="page-link">1</a></li>
-                    <li class="page-item"><a href="#" class="page-link">2</a></li>
-                    <li class="page-item"><a href="#" class="page-link">3</a></li>
-                    <li class="page-item"><a href="#" class="page-link">4</a></li>
-                    <li class="page-item"><a href="#" class="page-link">5</a></li>
-                    <li class="page-item"><a href="#" class="page-link">6</a></li>
-                    <li class="page-item"><a href="#" class="page-link">7</a></li>
-                    <li class="page-item">
-                        <a href="#" class="page-link" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
         </div>
     </div>
     <!-- /.row -->
@@ -199,7 +125,14 @@
 </div>
 <!-- /.container -->
 
-
 <div th:replace="~{fragments/footer :: footer}">...</div>
+
+<!-- JavaScript -->
+<script th:inline="javascript">
+    var username = [[${user.username}]];
+</script>
+
+<script src="../../js/userspace/u.js" th:src="@{/js/userspace/u.js}"></script>
+
 </body>
 </html>

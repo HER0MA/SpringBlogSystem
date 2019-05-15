@@ -17,38 +17,31 @@
             <div class="card mb-4">
                 <div class="card-block">
                     <h2 class="card-title">
-							<span>
-			                  <a href="/u/henry" title="henry">
-			                    <img src="https://static.oschina.net/uploads/user/77/155593_50.jpg?t=1437621331000" class="blog-avatar-50"
-                                     alt="henry">
-			                  </a>
-					        </span>
-                        <a href="/u/henry/blogs/1" class="card-link" title="henry">
+					    <span>
+					      <a href="/u/henry" title="henry" th:href="'/u/' + ${blogModel.user.username}"  th:title="${blogModel.user.username}" >
+					        <img src="/images/avatar-defualt.jpg" th:src="${blogModel.user.avatar} == null ? '/images/avatar-defualt.jpg' : ${blogModel.user.avatar}" class="blog-avatar-50">
+					      </a>
+					    </span>
+                        <a href="/u/henry/blogs/1" class="card-link" title="henry"
+                           th:href="'/u/' + ${blogModel.user.username} + '/blogs/'+ ${blogModel.id}"  th:title="${blogModel.user.username}" th:text="${blogModel.title}">
                             Lorem ipsum dolor sit amet
-                        </a></h2>
+                        </a>
+                    </h2>
                     <div class="card-text">
-                        <a href="/u/henry" class="card-link">henry</a> Published on 2018-11-23 <i class="fa fa-eye" aria-hidden="true">210</i>
-                        <i class="fa fa-heart-o" aria-hidden="true">10</i> <i class="fa fa-comment-o"
-                                                                              aria-hidden="true">110</i>
+                        <a href="/u/henry" th:href="'/u/' + ${blogModel.user.username}" class="card-link" th:text="${blogModel.user.username}" >henry</a> Published on [[${#dates.format(blogModel.createTime, 'yyyy-MM-dd HH:mm')}]]
+                        <i class="fa fa-eye" aria-hidden="true">[[${blogModel.readSize}]]</i>
+                        <i class="fa fa-heart-o" aria-hidden="true">[[${blogModel.voteSize}]]</i>
+                        <i class="fa fa-comment-o" aria-hidden="true">[[${blogModel.commentSize}]]</i>
+                        <a href="/u/henry" th:if="${isBlogOwner}" th:href="'/u/' + ${blogModel.user.username}+ '/blogs/edit/'+ ${blogModel.id}" class="btn btn-primary float-right">Edit</a>
+                        <a href="javascript:void(0)" th:if="${isBlogOwner}" class="btn btn-primary float-right blog-delete-blog">Delete</a>
                     </div>
                     <hr>
-                    <article class="post-content">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    <article class="post-content" th:utext="${blogModel.htmlContent}">
 
-                        <h2>Lorem ipsum</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt. </p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. </p>
-
-
-                </article>
+                    </article>
                     <hr>
                 </div>
                 <div class="card-block">
-
 
                     <h5>Group: <a href="/u/henry/blogs?category=11">
                         Lorem
@@ -124,6 +117,13 @@
 
 
 <div th:replace="~{fragments/footer :: footer}">...</div>
-<script src="../../js/blog.js" th:src="@{/js/blog.js}"></script>
+
+<!-- JavaScript -->
+<script th:inline="javascript">
+    var blogId = [[${blogModel.id}]];
+    var blogUrl = '/u/' + [[${blogModel.user.username}]] + '/blogs/'+ [[${blogModel.id}]] ;
+</script>
+<script src="../../js/userspace/blog.js" th:src="@{/js/userspace/blog.js}"></script>
+
 </body>
 </html>

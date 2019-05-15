@@ -6,14 +6,14 @@
 </head>
 <body>
 <style type="text/css">
- 
+
     @import "/css/emoji/nature.css";
     @import "/css/emoji/object.css";
     @import "/css/emoji/people.css";
     @import "/css/emoji/place.css";
     @import "/css/emoji/Sysmbols.css";
     @import "/css/emoji/twemoji.css";
- 
+
 </style>
 <!-- Page Content -->
 <div class="container blog-content-container">
@@ -25,13 +25,14 @@
 
             <!-- Blog Post -->
             <div class="card mb-4">
-                <div class="card-block">
-                    <input  type="text" class="form-control" placeholder="Input Title" value="" maxlength="50">
+                <div class="card-block" th:object="${blogModel.blog}">
+                    <input type="hidden" name="id" th:value="*{id}" id="blogId">
+                    <input  type="text" class="form-control" placeholder="Input title"  id="title" name="title"  th:value="*{title}"  maxlength="50">
 
-                    <textarea class="blog-textarea" placeholder="Input Summary" value="" maxlength="300"></textarea>
+                    <textarea class="blog-textarea" placeholder="Input summary"  id="summary" name="summary"  th:text="*{summary}" maxlength="300"></textarea>
 
                     <hr>
-                    <textarea id="md" data-provide="markdown" data-hidden-buttons="cmdImage"  ></textarea>
+                    <textarea id="md" data-provide="markdown" data-hidden-buttons="cmdImage" name="content"  th:text="*{content}"></textarea>
 
                     <hr>
                 </div>
@@ -43,9 +44,28 @@
         <!-- right -->
         <div class="col-md-4">
             <div>
-                <!-- Menu -->
+
+                <!-- Upload Image -->
                 <div class="card ">
-                    <h5 class="card-header"><i class="fa fa-cog" aria-hidden="true"></i> Blog Setting</h5>
+                    <h5 class="card-header"><i class="fa fa-file-image-o" aria-hidden="true"></i>Upload Image</h5>
+                    <div class="card-block">
+                        <div class="row mt-1">
+                            <div  class="col-lg-12">
+
+                                <form  enctype="multipart/form-data"  id="uploadformid"  >
+                                    <input type="file" name="file" accept="image/png,image/gif,image/jpeg" id="file">
+                                    <button class="btn btn-primary float-right"  type="button" id="uploadImage" >Insert</button>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Blog Setting -->
+                <div class="card ">
+                    <h5 class="card-header"><i class="fa fa-cog" aria-hidden="true"></i> Setting</h5>
                     <div class="card-block">
                         <div class="row mt-1">
                             <div  class="col-lg-12">
@@ -54,19 +74,19 @@
                         </div>
                         <div class="row mt-1">
                             <div  class="col-lg-12">
-                                Group:					<select id="single" class="form-control form-control-chosen" data-placeholder="Select One">
-								  <option>Java</option>
-								  <option>Python</option>
-								  <option>Database</option>
-								</select>
+                                Group:					<select id="single" class="form-control form-control-chosen" data-placeholder="Select one">
+                                <option>Java</option>
+                                <option>Python</option>
+                                <option>Database</option>
+                            </select>
                             </div>
                         </div>
                         <div class="row mt-1">
                             <div  class="col-lg-12">
-								<button class="btn btn-primary float-right">Publish</button>
+                                <button class="btn btn-primary float-right" id="submitBlog"  th:attr="userName=${#authentication.name}">Publish</button>
                             </div>
                         </div>
-                        
+
                     </div>
 
                 </div>
@@ -83,9 +103,13 @@
 
 
 <div th:replace="~{fragments/footer :: footer}">...</div>
- 
 
-<script src="../../js/blogedit.js" th:src="@{/js/blogedit.js}"></script>
- 
+
+<!-- JavaScript -->
+<script th:inline="javascript">
+    var fileServerUrl = [[${blogModel.fileServerUrl}]];
+</script>
+<script src="../../js/userspace/blogedit.js" th:src="@{/js/userspace/blogedit.js}"></script>
+
 </body>
 </html>

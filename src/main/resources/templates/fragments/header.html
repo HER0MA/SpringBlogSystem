@@ -4,6 +4,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <!-- CSRF -->
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <!-- default header name is X-CSRF-TOKEN -->
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
     <!-- Tether core CSS -->
     <link href="../../css/tether.min.css" th:href="@{/css/tether.min.css}" rel="stylesheet">
 
@@ -58,8 +63,28 @@
 
             </ul>
 
-            <a href="/login" class="btn btn-outline-success my-2 my-sm-0" type="submit">Sign In</a>
-            <a href="/register" class="btn btn-outline-success my-2 my-sm-0" type="submit">Sign Up</a>
+            <div sec:authorize="isAuthenticated()"  class="row" >
+                <div class="dropdown">
+                    <a class=" dropdown-toggle" href="/u/henry" th:href="@{'/u/' + ${#authentication.name}}" data-toggle="dropdown"><span sec:authentication="name"></span></a>
+                    <div class="dropdown-menu" >
+                        <a class=" dropdown-item" href="/u/henry" th:href="@{'/u/' + ${#authentication.name}}">User</a>
+                        <a class="dropdown-item" href="/u/henry/profile" th:href="@{'/u/' + ${#authentication.name}} + '/profile'" >Setting</a>
+                    </div>
+                </div>
+                <div>
+                    <a href="/u/henry/blogs/edit" th:href="'/u/' + ${#authentication.name} + '/blogs/edit'" class="btn btn-outline-success my-2 my-sm-0">New Blog</a>
+                </div>
+
+                <form action="/logout" th:action="@{/logout}" method="post">
+                    <input class="btn btn-outline-success " type="submit" value="Sign Out">
+                </form>
+            </div>
+
+            <div sec:authorize="isAnonymous()">
+                <a href="/login" class="btn btn-outline-success my-2 my-sm-0" type="submit">Sign In</a>
+                <a href="/register" class="btn btn-outline-success my-2 my-sm-0" type="submit">Sign Up</a>
+            </div>
+
         </div>
 
     </div>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head th:replace="~{fragments/header :: header}">
+</head>
+<body>
+<!-- Page Content -->
+<div class="container blog-content-container">
+
+    <div class="row">
+
+        <!-- Left -->
+        <div class="col-md-4 col-xl-3">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <span>
+                      <a href="/u/henry" title="henry" >
+                        <img src="https://static.oschina.net/uploads/user/77/155593_50.jpg?t=1437621331000" class="blog-avatar-230"
+                             alt="henry">
+                      </a>
+                    </span>
+
+                </div>
+
+            </div>
+            <div class="row">
+
+                <div class="col-md-12">
+                    <h2 class="card-text">Henry</h2>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-md-12">
+                    <h4 class="card-text">henry</h4>
+                </div>
+            </div>
+            <hr>
+            <div class="row ">
+                <div class="col-md-12">
+                    <h5><i class="fa fa-envelope-o" aria-hidden="true"></i>
+                        <a href="mailto:henry@test.com">henry@test.com</a></h5>
+                </div>
+            </div>
+
+	      <!-- 分类 -->
+	        <div class="card my-4">
+	            <h5 class="card-header"><i class="fa fa-bars" aria-hidden="true"></i> Group</h5>
+	
+	            <ul class="list-group">
+	                <a href="/u/henry/blogs?category=11" class="list-group-item" title="henry">
+	                    Spring Data
+	                </a>
+	                <a href="/u/henry/blogs?category=11" class="list-group-item" title="henry">
+	                    	Distributed System
+	                </a>
+	                <a href="/u/henry/blogs?category=11" class="list-group-item" title="henry">
+	                   	Java
+	                </a>
+	                <a href="/u/henry/blogs?category=11" class="list-group-item" title="henry">
+	                   Eclipse
+	                </a>
+	
+	                <a href="/u/henry/blogs?category=11" class="list-group-item" title="henry">
+	                     Plugin
+	                </a>
+	            </ul>
+	        </div>
+        </div>
+        
+   
+
+        <!-- Right -->
+
+
+        <div class="col-md-8 col-xl-9">
+            <!-- Tool bar -->
+ 
+            <ul class="nav nav-tabs mr-auto">
+
+                <li class="nav-item">
+                    <a class="nav-link active" href="/u/henry/blogs?order=new">Most Recent</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/u/henry/blogs?order=hot">Hottest</a>
+                </li>
+
+                <form class="form-inline mt-2 mt-md-0">
+                    <input class="form-control mr-sm-2" type="text" placeholder="Search">
+                    <a href="/u/henry/blogs?keyword=ww" class="btn btn-outline-secondary my-2 my-sm-0"><i class="fa fa-search"
+                                                                                             aria-hidden="true"></i></a>
+                </form>
+
+
+            </ul>
+
+
+
+            <!-- Blog Post -->
+            <div class="card mb-4">
+                <div class="card-block">
+                    <h2 class="card-title">
+ 
+                        <a href="/u/henry/blogs/1" class="card-link" title="henry">
+                            Lorem ipsum dolor sit amet
+                        </a></h2>
+                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
+                        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+                        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris. </p>
+                    <div class="card-text">
+                        	Published on 2018-03-17 <i class="fa fa-eye" aria-hidden="true">210</i>
+                        <i class="fa fa-heart-o" aria-hidden="true">10</i> <i class="fa fa-comment-o"
+                                                                              aria-hidden="true">110</i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Blog Post -->
+            <div class="card mb-4">
+                <div class="card-block">
+                    <h2 class="card-title">
+                        <a href="/u/henry/blogs/1" class="card-link" title="henry">
+                            Lorem ipsum dolor sit amet
+                        </a></h2>
+                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                        Ut enim ad minim veniam. </p>
+                    <div class="card-text">
+                        	Published on 2018-03-17 <i class="fa fa-eye" aria-hidden="true">1</i>
+                        <i class="fa fa-heart-o" aria-hidden="true">130</i> <i class="fa fa-comment-o"
+                                                                               aria-hidden="true">0</i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Blog Post -->
+            <div class="card mb-4">
+                <div class="card-block">
+                    <h2 class="card-title">
+                        <a href="/u/henry/blogs/1" class="card-link" title="henry">
+                            Lorem ipsum dolor sit amet
+                        </a></h2>
+                    <p class="card-text">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                        Ut enim ad minim veniam.</p>
+                    <div class="card-text">
+                        	Published on 2018-03-17 <i class="fa fa-eye" aria-hidden="true">2</i>
+                        <i class="fa fa-heart-o" aria-hidden="true">0</i> <i class="fa fa-comment-o" aria-hidden="true">10</i>
+                    </div>
+                </div>
+            </div>
+            <!-- Blog Post -->
+            <div class="card mb-4">
+                <div class="card-block">
+                    <h2 class="card-title">
+                        <a href="/u/henry/blogs/1" class="card-link" title="henry">
+                            Lorem ipsum dolor sit amet
+                        </a></h2>
+                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                        Ut enim ad minim veniam.</p>
+                    <div class="card-text">
+                       	Published on 2018-03-17 <i class="fa fa-eye" aria-hidden="true">2</i>
+                        <i class="fa fa-heart-o" aria-hidden="true">0</i> <i class="fa fa-comment-o" aria-hidden="true">10</i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <nav>
+                <ul class="pagination justify-content-center mb-4">
+                    <li class="page-item">
+                        <a href="#" class="page-link" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item active"><a href="#" class="page-link">1</a></li>
+                    <li class="page-item"><a href="#" class="page-link">2</a></li>
+                    <li class="page-item"><a href="#" class="page-link">3</a></li>
+                    <li class="page-item"><a href="#" class="page-link">4</a></li>
+                    <li class="page-item"><a href="#" class="page-link">5</a></li>
+                    <li class="page-item"><a href="#" class="page-link">6</a></li>
+                    <li class="page-item"><a href="#" class="page-link">7</a></li>
+                    <li class="page-item">
+                        <a href="#" class="page-link" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <!-- /.row -->
+
+</div>
+<!-- /.container -->
+
+
+<div th:replace="~{fragments/footer :: footer}">...</div>
+</body>
+</html>

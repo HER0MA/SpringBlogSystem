@@ -5,6 +5,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -124,6 +126,12 @@ public class User implements UserDetails {
 
     public void setAuthorities(List<Authority> authorities) {
         this.authorities = authorities;
+    }
+
+    public void setEncodePassword(String password) {
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
+        String encodePasswd = encoder.encode(password);
+        this.password = encodePasswd;
     }
 
     @Override

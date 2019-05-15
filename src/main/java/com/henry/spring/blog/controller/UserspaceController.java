@@ -2,7 +2,15 @@ package com.henry.spring.blog.controller;
 
 import com.henry.spring.blog.domain.User;
 import com.henry.spring.blog.repository.UserRepository;
+import com.henry.spring.blog.service.UserService;
+import com.henry.spring.blog.vo.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +22,15 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequestMapping("/u")
 public class UserspaceController {
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private UserDetailsService userDetailsService;
+
+    @Value("${file.server.url}")
+    private String fileServerUrl;
 
     @GetMapping("/{username}")
     public String userSpace(@PathVariable("username") String username) {
@@ -57,5 +74,66 @@ public class UserspaceController {
     public String editBlog() {
 
         return "/userspace/blogedit";
+    }
+
+    @GetMapping("/{username}/profile")
+    @PreAuthorize("authentication.name.equals(#username)")
+    public ModelAndView profile(@PathVariable("username") String username, Model model) {
+        User  user = (User)userDetailsService.loadUserByUsername(username);
+        model.addAttribute("user", user);
+        model.addAttribute("fileServerUrl", fileServerUrl);// return address of file server
+        return new ModelAndView("/userspace/profile", "userModel", model);
+    }
+
+    @PostMapping("/{username}/profile")
+    @PreAuthorize("authentication.name.equals(#username)")
+    public String saveProfile(@PathVariable("username") String username,User user) {
+        User originalUser = userService.getUserById(user.getId());
+        originalUser.setEmail(user.getEmail());
+        originalUser.setName(user.getName());
+
+        // check if password has changed
+        String rawPassword = originalUser.getPassword();
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
+        String encodePasswd = encoder.encode(user.getPassword());
+        boolean isMatch = encoder.matches(rawPassword, encodePasswd);
+        if (!isMatch) {
+            originalUser.setEncodePassword(user.getPassword());
+        }
+
+        userService.saveOrUpateUser(originalUser);
+        return "redirect:/u/" + username + "/profile";
+    }
+
+    /**
+     * Get avatar edit page
+     * @param username
+     * @param model
+     * @return
+     */
+    @GetMapping("/{username}/avatar")
+    @PreAuthorize("authentication.name.equals(#username)")
+    public ModelAndView avatar(@PathVariable("username") String username, Model model) {
+        User  user = (User)userDetailsService.loadUserByUsername(username);
+        model.addAttribute("user", user);
+        return new ModelAndView("/userspace/avatar", "userModel", model);
+    }
+
+    /**
+     * Save avatar
+     * @param username
+     * @param user
+     * @return
+     */
+    @PostMapping("/{username}/avatar")
+    @PreAuthorize("authentication.name.equals(#username)")
+    public ResponseEntity<Response> saveAvatar(@PathVariable("username") String username, @RequestBody User user) {
+        String avatarUrl = user.getAvatar();
+
+        User originalUser = userService.getUserById(user.getId());
+        originalUser.setAvatar(avatarUrl);
+        userService.saveOrUpateUser(originalUser);
+
+        return ResponseEntity.ok().body(new Response(true, "Success", avatarUrl));
     }
 }

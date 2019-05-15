@@ -67,7 +67,7 @@
                 <div class="dropdown">
                     <a class=" dropdown-toggle" href="/u/henry" th:href="@{'/u/' + ${#authentication.name}}" data-toggle="dropdown"><span sec:authentication="name"></span></a>
                     <div class="dropdown-menu" >
-                        <a class=" dropdown-item" href="/u/henry" th:href="@{'/u/' + ${#authentication.name}}">User</a>
+                        <a class=" dropdown-item" href="/u/henry" th:href="@{'/u/' + ${#authentication.name}}">Profile</a>
                         <a class="dropdown-item" href="/u/henry/profile" th:href="@{'/u/' + ${#authentication.name}} + '/profile'" >Setting</a>
                     </div>
                 </div>

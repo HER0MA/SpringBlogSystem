@@ -2,18 +2,9 @@ package com.henry.spring.blog.domain;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.List;
 
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -72,6 +63,11 @@ public class Blog implements Serializable {
     @Column(name="tags", length = 100)
     private String tags;
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "blog_comment", joinColumns = @JoinColumn(name = "blog_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "comment_id", referencedColumnName = "id"))
+    private List<Comment> comments;
+
     protected Blog() {
         // TODO Auto-generated constructor stub
     }
@@ -127,28 +123,60 @@ public class Blog implements Serializable {
     public String getHtmlContent() {
         return htmlContent;
     }
+
     public Integer getReadSize() {
         return readSize;
     }
+
     public void setReadSize(Integer readSize) {
         this.readSize = readSize;
     }
+
     public Integer getCommentSize() {
         return commentSize;
     }
+
     public void setCommentSize(Integer commentSize) {
         this.commentSize = commentSize;
     }
+
     public Integer getVoteSize() {
         return voteSize;
     }
+
     public void setVoteSize(Integer voteSize) {
         this.voteSize = voteSize;
     }
+
     public String getTags() {
         return tags;
     }
+
     public void setTags(String tags) {
         this.tags = tags;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+        this.commentSize = this.comments.size();
+    }
+
+    public void addComment(Comment comment) {
+        this.comments.add(comment);
+        this.commentSize = this.comments.size();
+    }
+
+    public void removeComment(Long commentId) {
+        for (int index=0; index < this.comments.size(); index ++ ) {
+            if (comments.get(index).getId() == commentId) {
+                this.comments.remove(index);
+                break;
+            }
+        }
+        this.commentSize = this.comments.size();
     }
 }

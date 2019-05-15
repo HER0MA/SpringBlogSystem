@@ -43,8 +43,9 @@
                 </div>
                 <div class="card-block">
 
-                    <h5>Group: <a href="/u/henry/blogs?category=11">
-                        Lorem
+
+                    <h5>Group:<a href="/u/henry/blogs?category=11">
+                        Spring Data
                     </a></h5>
 
                     <h5>Tag:
@@ -59,35 +60,31 @@
                 </div>
 
                 <div class="card-block">
-
-
                     <h5>Comment: </h5>
                     <div class="row">
                         <div class="col-lg-12">
-                            <textarea class="blog-textarea" placeholder="Input Comment here!"></textarea>
+                            <textarea class="blog-textarea" placeholder="Input comment here" id="commentContent"></textarea>
                         </div>
                     </div>
-                    <button class="btn btn-primary float-right">Publish</button>
+                    <button class="btn btn-primary float-right" id="submitComment">Publish</button>
                     <button class="btn btn-primary float-right">Like</button>
-
                 </div>
-                <div class="card-block">
+                <div class="card-block" id="mainContainer">
 
-                    <div class="row">
+                    <div class="row" id="mainContainerRepleace" th:each="comment,commentStat : ${comments}" th:object="${comment}">
                         <h2 class="card-title col-lg-1 col-md-2">
-							<span>
-			                  <a href="/u/henry" title="henry">
-			                    <img src="https://static.oschina.net/uploads/user/1353/2707606_50.jpg?t=1492140206000" class="blog-avatar-50"
-                                     alt="henry">
-			                  </a>
-					        </span>
+				            <span>
+				              <a href="/u/henry" th:href="'/u/'+ *{user.username}" title="henry" th:title="*{user.username}">
+				                <img src="/images/avatar-defualt.jpg" th:src="*{user.avatar} == null ? '/images/avatar-defualt.jpg' : *{user.avatar}" class="blog-avatar-50">
+				              </a>
+				            </span>
                         </h2>
                         <div class="card-text col-lg-11 col-md-10">
-                            <a href="/u/henry" class="card-link">henry</a> 2019-01-11 14:20
-                            <p>Great article!</p>
+                            <a href="/u/henry" th:href="'/u/'+ *{user.username}" class="card-link" th:text="*{user.username}">henry</a> No.[[${commentStat.index} + 1]]  [[${#dates.format(comment.createTime, 'yyyy-MM-dd HH:mm')}]]
+                            <a href="javascript:void(0)" class="blog-delete-comment" th:if="${commentOwner} eq *{user.username}" th:attr="commentId=*{id}"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                            <p th:text="*{content}">Great article!</p>
                         </div>
                     </div>
-
                 </div>
             </div>
 

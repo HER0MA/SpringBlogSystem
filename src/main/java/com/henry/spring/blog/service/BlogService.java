@@ -19,5 +19,8 @@ public interface BlogService {
 
     void readingIncrease(Long id);
 
+    Blog createComment(Long blogId, String commentContent);
+
+    void removeComment(Long blogId, Long commentId);
 }
 

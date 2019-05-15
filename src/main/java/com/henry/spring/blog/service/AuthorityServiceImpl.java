@@ -1,7 +1,7 @@
 package com.henry.spring.blog.service;
 
 import com.henry.spring.blog.domain.Authority;
-import com.henry.spring.blog.domain.AuthorityRepository;
+import com.henry.spring.blog.repository.AuthorityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

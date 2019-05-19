@@ -2,6 +2,7 @@ package com.henry.spring.blog.controller;
 
 import com.henry.spring.blog.domain.Blog;
 import com.henry.spring.blog.domain.User;
+import com.henry.spring.blog.domain.Vote;
 import com.henry.spring.blog.repository.UserRepository;
 import com.henry.spring.blog.service.BlogService;
 import com.henry.spring.blog.service.UserService;
@@ -106,6 +107,19 @@ public class UserspaceController {
             }
         }
 
+        List<Vote> votes = blog.getVotes();
+        Vote currentVote = null;
+        if (principal !=null) {
+            for (Vote vote : votes) {
+                if (vote.getUser().getUsername().equals(principal.getUsername())) {
+                    currentVote = vote;
+                    break;
+                }
+
+            }
+        }
+
+        model.addAttribute("currentVote",currentVote);
         model.addAttribute("isBlogOwner", isBlogOwner);
         model.addAttribute("blogModel",blog);
 

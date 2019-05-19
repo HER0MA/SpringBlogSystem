@@ -99,4 +99,59 @@ $(function() {
 
     // Initialize
     getCommnet(blogId);
+
+    // vote
+    $(".blog-content-container").on("click","#submitVote", function () {
+        // Get CSRF Token
+        var csrfToken = $("meta[name='_csrf']").attr("content");
+        var csrfHeader = $("meta[name='_csrf_header']").attr("content");
+
+        $.ajax({
+            url: '/votes',
+            type: 'POST',
+            data:{"blogId":blogId},
+            beforeSend: function(request) {
+                request.setRequestHeader(csrfHeader, csrfToken); // Add CSRF Token
+            },
+            success: function(data){
+                if (data.success) {
+                    // redirect
+                    window.location = blogUrl;
+                    toastr.info(data.message);
+                } else {
+                    toastr.error(data.message);
+                }
+            },
+            error : function() {
+                toastr.error("error!");
+            }
+        });
+    });
+
+    // cancel vote
+    $(".blog-content-container").on("click","#cancelVote", function () {
+        // Get CSRF Token
+        var csrfToken = $("meta[name='_csrf']").attr("content");
+        var csrfHeader = $("meta[name='_csrf_header']").attr("content");
+
+        $.ajax({
+            url: '/votes/'+$(this).attr('voteId')+'?blogId='+blogId,
+            type: 'DELETE',
+            beforeSend: function(request) {
+                request.setRequestHeader(csrfHeader, csrfToken); // Add CSRF Token
+            },
+            success: function(data){
+                if (data.success) {
+                    // redirect
+                    window.location = blogUrl;
+                    toastr.info(data.message);
+                } else {
+                    toastr.error(data.message);
+                }
+            },
+            error : function() {
+                toastr.error("error!");
+            }
+        });
+    });
 });

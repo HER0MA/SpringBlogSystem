@@ -67,7 +67,8 @@
                         </div>
                     </div>
                     <button class="btn btn-primary float-right" id="submitComment">Publish</button>
-                    <button class="btn btn-primary float-right">Like</button>
+                    <button class="btn btn-primary float-right" th:if="${currentVote} == null" id="submitVote">Vote</button>
+                    <button class="btn btn-primary float-right" th:if="${currentVote}" th:attr="voteId=${currentVote.id}" id="cancelVote">Cancel Vote</button>
                 </div>
                 <div class="card-block" id="mainContainer">
 

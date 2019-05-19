@@ -1,6 +1,7 @@
 package com.henry.spring.blog.service;
 
 import com.henry.spring.blog.domain.Blog;
+import com.henry.spring.blog.domain.Catalog;
 import com.henry.spring.blog.domain.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,5 +27,7 @@ public interface BlogService {
     Blog createVote(Long blogId);
 
     void removeVote(Long blogId, Long voteId);
+
+    Page<Blog> listBlogsByCatalog(Catalog catalog, Pageable pageable);
 }
 

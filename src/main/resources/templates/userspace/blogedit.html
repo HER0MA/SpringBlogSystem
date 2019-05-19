@@ -74,10 +74,8 @@
                         </div>
                         <div class="row mt-1">
                             <div  class="col-lg-12">
-                                Group:					<select id="single" class="form-control form-control-chosen" data-placeholder="Select one">
-                                <option>Java</option>
-                                <option>Python</option>
-                                <option>Database</option>
+                                Catalog:<select id="catalogSelect" class="form-control form-control-chosen" data-placeholder="Select" >
+                                <option th:value="*{id}" th:text="*{name}" th:each="catalog : ${blogModel.catalogs}" th:object="${catalog}" th:selected="${catalog  eq blogModel.blog.catalog }">Java</option>
                             </select>
                             </div>
                         </div>

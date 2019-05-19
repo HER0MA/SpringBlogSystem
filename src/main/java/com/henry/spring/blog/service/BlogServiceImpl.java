@@ -2,10 +2,7 @@ package com.henry.spring.blog.service;
 
 import javax.transaction.Transactional;
 
-import com.henry.spring.blog.domain.Blog;
-import com.henry.spring.blog.domain.Comment;
-import com.henry.spring.blog.domain.User;
-import com.henry.spring.blog.domain.Vote;
+import com.henry.spring.blog.domain.*;
 import com.henry.spring.blog.repository.BlogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -94,6 +91,12 @@ public class BlogServiceImpl implements BlogService {
         Blog originalBlog = blogRepository.findOne(blogId);
         originalBlog.removeVote(voteId);
         this.saveBlog(originalBlog);
+    }
+
+    @Override
+    public Page<Blog> listBlogsByCatalog(Catalog catalog, Pageable pageable) {
+        Page<Blog> blogs = blogRepository.findByCatalog(catalog, pageable);
+        return blogs;
     }
 }
 

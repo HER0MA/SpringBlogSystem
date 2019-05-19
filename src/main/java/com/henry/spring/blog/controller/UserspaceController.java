@@ -1,10 +1,12 @@
 package com.henry.spring.blog.controller;
 
 import com.henry.spring.blog.domain.Blog;
+import com.henry.spring.blog.domain.Catalog;
 import com.henry.spring.blog.domain.User;
 import com.henry.spring.blog.domain.Vote;
 import com.henry.spring.blog.repository.UserRepository;
 import com.henry.spring.blog.service.BlogService;
+import com.henry.spring.blog.service.CatalogService;
 import com.henry.spring.blog.service.UserService;
 import com.henry.spring.blog.util.ConstraintViolationExceptionHandler;
 import com.henry.spring.blog.vo.Response;
@@ -42,6 +44,9 @@ public class UserspaceController {
     private BlogService blogService;
 
     @Autowired
+    private CatalogService catalogService;
+
+    @Autowired
     private UserDetailsService userDetailsService;
 
     @Value("${file.server.url}")
@@ -69,7 +74,10 @@ public class UserspaceController {
         Page<Blog> page = null;
 
         if (catalogId != null && catalogId > 0) {
-            // todo
+            Catalog catalog = catalogService.getCatalogById(catalogId);
+            Pageable pageable = new PageRequest(pageIndex, pageSize);
+            page = blogService.listBlogsByCatalog(catalog, pageable);
+            order = "";
         } else if (order.equals("hot")) {
             Sort sort = new Sort(Sort.Direction.DESC,"readSize","commentSize","voteSize");
             Pageable pageable = new PageRequest(pageIndex, pageSize, sort);
@@ -129,6 +137,9 @@ public class UserspaceController {
 
     @GetMapping("/{username}/blogs/edit")
     public ModelAndView createBlog(@PathVariable("username") String username, Model model) {
+        User user = (User)userDetailsService.loadUserByUsername(username);
+        List<Catalog> catalogs = catalogService.listCatalogs(user);
+        model.addAttribute("catalogs", catalogs);
         model.addAttribute("blog", new Blog(null, null, null));
         model.addAttribute("fileServerUrl", fileServerUrl);
         return new ModelAndView("/userspace/blogedit", "blogModel", model);
@@ -136,6 +147,9 @@ public class UserspaceController {
 
     @GetMapping("/{username}/blogs/edit/{id}")
     public ModelAndView editBlog(@PathVariable("username") String username, @PathVariable("id") Long id, Model model) {
+        User user = (User)userDetailsService.loadUserByUsername(username);
+        List<Catalog> catalogs = catalogService.listCatalogs(user);
+        model.addAttribute("catalogs", catalogs);
         model.addAttribute("blog", blogService.getBlogById(id));
         model.addAttribute("fileServerUrl", fileServerUrl);
         return new ModelAndView("/userspace/blogedit", "blogModel", model);
@@ -144,6 +158,9 @@ public class UserspaceController {
     @PostMapping("/{username}/blogs/edit")
     @PreAuthorize("authentication.name.equals(#username)")
     public ResponseEntity<Response> saveBlog(@PathVariable("username") String username, @RequestBody Blog blog) {
+        if (blog.getCatalog().getId() == null) {
+            return ResponseEntity.ok().body(new Response(false,"No catalog"));
+        }
         try {
             if (blog.getId()!=null) { // edit
                 Blog orignalBlog = blogService.getBlogById(blog.getId());

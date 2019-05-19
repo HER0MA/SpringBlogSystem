@@ -44,7 +44,7 @@
                 <div class="card-block">
 
 
-                    <h5>Group:<a href="/u/henry/blogs?category=11">
+                    <h5>Catalog:<a th:href="'/u/'+${blogModel.user.username} + '/blogs?catalog='+${blogModel.catalog.id} " th:text="${blogModel.catalog.name}">
                         Spring Data
                     </a></h5>
 

@@ -69,4 +69,8 @@ $(function() {
             }
         })
     })
+
+    $('.form-control-tag').tagsInput({
+        'defaultText':'Input tag'
+    });
 });

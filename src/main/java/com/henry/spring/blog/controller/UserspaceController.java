@@ -167,6 +167,7 @@ public class UserspaceController {
                 orignalBlog.setTitle(blog.getTitle());
                 orignalBlog.setContent(blog.getContent());
                 orignalBlog.setSummary(blog.getSummary());
+                orignalBlog.setTags(blog.getTags());
                 blogService.saveBlog(orignalBlog);
             } else { // new
                 User user = (User)userDetailsService.loadUserByUsername(username);

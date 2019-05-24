@@ -3,7 +3,9 @@ package com.henry.spring.blog.service;
 import javax.transaction.Transactional;
 
 import com.henry.spring.blog.domain.*;
+import com.henry.spring.blog.domain.es.EsBlog;
 import com.henry.spring.blog.repository.BlogRepository;
+import com.henry.spring.blog.repository.es.EsBlogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,10 +18,25 @@ public class BlogServiceImpl implements BlogService {
     @Autowired
     private BlogRepository blogRepository;
 
+    @Autowired
+    private EsBlogService esBlogService;
+
     @Transactional
     @Override
     public Blog saveBlog(Blog blog) {
+        boolean isNew = (blog.getId() == null);
+        EsBlog esBlog = null;
+
         Blog returnBlog = blogRepository.save(blog);
+
+        if (isNew) {
+            esBlog = new EsBlog(returnBlog);
+        } else {
+            esBlog = esBlogService.getEsBlogByBlogId(blog.getId());
+            esBlog.update(returnBlog);
+        }
+
+        esBlogService.updateEsBlog(esBlog);
         return returnBlog;
     }
 
@@ -27,6 +44,8 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public void removeBlog(Long id) {
         blogRepository.delete(id);
+        EsBlog esblog = esBlogService.getEsBlogByBlogId(id);
+        esBlogService.removeEsBlog(esblog.getId());
     }
 
     @Override
